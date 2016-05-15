@@ -54,6 +54,11 @@ pub extern "C" fn rust_main(multiboot_information_address: usize) {
 
     interrupts::init();
 
+    fn recursive() {
+        recursive();
+    }
+    recursive();
+
     unsafe { *(0xdeadbeaf as *mut u32) = 42};
 
     unsafe {

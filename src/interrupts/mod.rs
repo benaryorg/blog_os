@@ -1,3 +1,6 @@
+use x86::task::TaskStateSegment;
+
+mod gdt;
 mod idt;
 
 lazy_static! {
@@ -11,12 +14,22 @@ lazy_static! {
 
         idt
     };
+
+    static ref TSS: TaskStateSegment = {
+        let mut tss = TaskStateSegment::new();
+
+        tss.ist[0] = 0xdeadbeaf; // TODO
+
+        tss
+    };
 }
 
 pub fn init() {
     assert_has_not_been_called!();
 
-    unsafe { IDT.load() }
+    unsafe {
+        IDT.load();
+    }
 }
 
 
